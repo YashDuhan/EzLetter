@@ -1,0 +1,135 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Backend API",
+    "description": "API for handling requests related to writing and serving docs.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Welcome Route",
+        "description": "Returns a welcome message.",
+        "responses": {
+          "200": {
+            "description": "Welcome message returned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Welcome to the backend API"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/write": {
+      "post": {
+        "summary": "Write Route",
+        "description": "Receives data for writing and returns the received data.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "designation": { "type": "string" },
+                  "destination": { "type": "string" },
+                  "date": { "type": "string", "format": "date" },
+                  "receiver_gender": { "type": "string" },
+                  "subject": { "type": "string" },
+                  "miscellaneous_info": { "type": "string" },
+                  "your_name": { "type": "string" },
+                  "name_footer": { "type": "string" }
+                },
+                "required": [
+                  "designation",
+                  "destination",
+                  "date",
+                  "receiver_gender",
+                  "subject",
+                  "miscellaneous_info",
+                  "your_name",
+                  "name_footer"
+                ],
+                "example": {
+                  "designation": "Manager",
+                  "destination": "XYZ Ltd.",
+                  "date": "2024-11-28",
+                  "receiver_gender": "Mr.",
+                  "subject": "Job Application",
+                  "miscellaneous_info": "N/A",
+                  "your_name": "John Doe",
+                  "name_footer": "12345"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success message with the received data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "designation": { "type": "string" },
+                        "destination": { "type": "string" },
+                        "date": { "type": "string" },
+                        "receiver_gender": { "type": "string" },
+                        "subject": { "type": "string" },
+                        "miscellaneous_info": { "type": "string" },
+                        "your_name": { "type": "string" },
+                        "name_footer": { "type": "string" }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "message": "Temp Logs",
+                  "data": {
+                    "designation": "Manager",
+                    "destination": "XYZ Ltd.",
+                    "date": "2024-11-28",
+                    "receiver_gender": "Mr.",
+                    "subject": "Job Application",
+                    "miscellaneous_info": "N/A",
+                    "your_name": "John Doe",
+                    "name_footer": "12345"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request if any required fields are missing."
+          }
+        }
+      }
+    },
+    "/docs": {
+      "get": {
+        "summary": "Docs Route",
+        "description": "Serves the documentation UI.",
+        "responses": {
+          "200": {
+            "description": "API reference UI served successfully."
+          }
+        }
+      }
+    }
+  }
+}
