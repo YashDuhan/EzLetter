@@ -1,18 +1,18 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Backend API",
-    "description": "API for handling requests related to writing and serving docs.",
-    "version": "1.0.0"
+    "title": "Letter Creation API",
+    "version": "1.0.0",
+    "description": "API for creating letters programmatically."
   },
   "paths": {
     "/": {
       "get": {
-        "summary": "Welcome Route",
+        "summary": "Welcome message",
         "description": "Returns a welcome message.",
         "responses": {
           "200": {
-            "description": "Welcome message returned successfully",
+            "description": "Welcome message",
             "content": {
               "application/json": {
                 "schema": {
@@ -32,8 +32,8 @@
     },
     "/write": {
       "post": {
-        "summary": "Write Route",
-        "description": "Receives data for writing and returns the received data.",
+        "summary": "Create a letter",
+        "description": "Accepts letter content and creates a letter. All fields are required to generate the letter.",
         "requestBody": {
           "required": true,
           "content": {
@@ -41,14 +41,47 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "designation": { "type": "string" },
-                  "destination": { "type": "string" },
-                  "date": { "type": "string", "format": "date" },
-                  "receiver_gender": { "type": "string" },
-                  "subject": { "type": "string" },
-                  "miscellaneous_info": { "type": "string" },
-                  "your_name": { "type": "string" },
-                  "name_footer": { "type": "string" }
+                  "designation": {
+                    "type": "string",
+                    "description": "Receiver's designation",
+                    "example": "HOD"
+                  },
+                  "destination": {
+                    "type": "string",
+                    "description": "Receiver's destination",
+                    "example": "College Name"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Date the letter is being sent",
+                    "example": "28-11-2024"
+                  },
+                  "receiver_gender": {
+                    "type": "string",
+                    "description": "Receiver's gender for salutation",
+                    "enum": ["Male", "Female"],
+                    "example": "Female"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "Subject of the application",
+                    "example": "Had Fever"
+                  },
+                  "miscellaneous_info": {
+                    "type": "string",
+                    "description": "Any additional information to be included in the letter",
+                    "example": "had a fever for a week. The doctor advised bed rest for 5 days, from October 10th to October 15th"
+                  },
+                  "your_name": {
+                    "type": "string",
+                    "description": "Your name",
+                    "example": "Yash Duhan"
+                  },
+                  "name_footer": {
+                    "type": "string",
+                    "description": "Footer information, typically your roll number or designation",
+                    "example": "2230900"
+                  }
                 },
                 "required": [
                   "designation",
@@ -59,74 +92,59 @@
                   "miscellaneous_info",
                   "your_name",
                   "name_footer"
-                ],
-                "example": {
-                  "designation": "Manager",
-                  "destination": "XYZ Ltd.",
-                  "date": "2024-11-28",
-                  "receiver_gender": "Mr.",
-                  "subject": "Job Application",
-                  "miscellaneous_info": "N/A",
-                  "your_name": "John Doe",
-                  "name_footer": "12345"
-                }
+                ]
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Success message with the received data.",
+            "description": "Letter created successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "type": "string" },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "designation": { "type": "string" },
-                        "destination": { "type": "string" },
-                        "date": { "type": "string" },
-                        "receiver_gender": { "type": "string" },
-                        "subject": { "type": "string" },
-                        "miscellaneous_info": { "type": "string" },
-                        "your_name": { "type": "string" },
-                        "name_footer": { "type": "string" }
-                      }
+                    "message": {
+                      "type": "string",
+                      "example": "To,\nCollege Name\n\nHOD,......"
                     }
-                  }
-                },
-                "example": {
-                  "message": "Temp Logs",
-                  "data": {
-                    "designation": "Manager",
-                    "destination": "XYZ Ltd.",
-                    "date": "2024-11-28",
-                    "receiver_gender": "Mr.",
-                    "subject": "Job Application",
-                    "miscellaneous_info": "N/A",
-                    "your_name": "John Doe",
-                    "name_footer": "12345"
                   }
                 }
               }
             }
           },
           "400": {
-            "description": "Bad Request if any required fields are missing."
-          }
-        }
-      }
-    },
-    "/docs": {
-      "get": {
-        "summary": "Docs Route",
-        "description": "Serves the documentation UI.",
-        "responses": {
-          "200": {
-            "description": "API reference UI served successfully."
+            "description": "Bad request due to missing fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "All fields are required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
